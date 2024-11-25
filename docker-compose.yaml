@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    image: openjdk:17-ea-slim-buster
+    ports:
+      - "8080:8080" # Пробрасываем порт для доступа к Java-приложению
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    container_name: postgres_container
+    restart: always
+    ports:
+      - "5432:5432" # Пробрасываем порт PostgreSQL
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
